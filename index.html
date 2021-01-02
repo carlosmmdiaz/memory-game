@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Memory game</title>
-</head>
+  </head>
 
-<body>
-    <memory-card></memory-card>
-    
+  <body>
+    <memory-app></memory-app>
+
     <script type="module">
-        import Card from './src/card/Card.js';
-        window.customElements.define('memory-card', Card);
+      import App from "./src/app/App.js";
+      window.customElements.define("memory-app", App);
     </script>
-</body>
-
+  </body>
 </html>
