@@ -22,6 +22,9 @@
   },
   "homepage": "https://github.com/carlosmmdiaz/memory-game#readme",
   "dependencies": {
+    "@cmmd-web/button": "^1.1.0",
+    "@cmmd-web/header": "^1.1.0",
+    "@cmmd-web/styles": "^1.1.0",
     "@open-wc/scoped-elements": "^1.3.2",
     "lit-element": "^2.4.0",
     "lit-html": "^1.3.0"

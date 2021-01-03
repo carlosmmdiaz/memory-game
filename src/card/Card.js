@@ -46,7 +46,7 @@ export class Card extends LitElement {
     if (!this.blocked) {
       this.dispatchEvent(
         new CustomEvent("card-flipping-over", {
-          detail: { idCard: this.idCard },
+          detail: { idCard: this.idCard, imageId: this.imageId },
         })
       );
     }
@@ -62,10 +62,12 @@ export class Card extends LitElement {
     return html`
       <button class="flip-card" @click="${this.flipCard}">
         <div class=${classMap(flipCardInnerClasses)}>
-          <div class="flip-card-front"></div>
+          <div class="flip-card-front">
+          <img src=${`./assets/mark.svg`} />
+          </div>
           <div class="flip-card-back">
             ${this.imageId
-              ? html`<img src=${`./assets/${this.imageId}.jpg`} />`
+              ? html`<img src=${`./assets/${this.imageId}.svg`} />`
               : nothing}
           </div>
         </div>
