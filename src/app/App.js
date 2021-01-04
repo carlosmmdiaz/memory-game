@@ -2,10 +2,16 @@ import { LitElement, html } from "lit-element";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { CMMDButton } from "@cmmd-web/button";
 import { CMMDHeader } from "@cmmd-web/header";
+import { LionDialog } from "@lion/dialog";
 
 import { Card } from "../card/Card.js";
+import { DialogContent } from "../dialog-content/DialogContent.js";
 import { generateRandomGameTable } from "./utils.js";
 import { styles } from "./App.style.js";
+
+const MAX_CARDS = 15;
+const HEADER_HEIGHT = 60;
+const CARD_WIDTH = 150;
 
 export default class App extends ScopedElementsMixin(LitElement) {
   static get scopedElements() {
@@ -13,12 +19,8 @@ export default class App extends ScopedElementsMixin(LitElement) {
       "memory-card": Card,
       "memory-button": CMMDButton,
       "memory-header": CMMDHeader,
-    };
-  }
-
-  static get properties() {
-    return {
-      numberOfCards: { type: String, reflect: true },
+      "memory-dialog": LionDialog,
+      "memory-dialog-content": DialogContent,
     };
   }
 
@@ -26,19 +28,25 @@ export default class App extends ScopedElementsMixin(LitElement) {
     return styles;
   }
 
-  constructor() {
-    super();
+  connectedCallback() {
+    super.connectedCallback();
 
-    const viewportHeight = Math.round(window.visualViewport.height / 150);
-    const viewportWidth = Math.round(window.visualViewport.width / 150);
-    this.numberOfCards = (viewportHeight * viewportWidth) / 2;
-    console.log("viewportHeight: ", viewportHeight);
-    console.log("viewportWidth: ", viewportWidth);
-    console.log("numberOfCards: ", this.numberOfCards);
+    window.addEventListener("close-overlay", () => console.log("pepe"));
   }
 
   loadGame() {
-    this.gameTable = generateRandomGameTable(Number(this.numberOfCards));
+    const viewportHeight = window.visualViewport.height - HEADER_HEIGHT;
+    const viewportWidth = window.visualViewport.width;
+
+    const cardsByHeight = viewportHeight / CARD_WIDTH;
+    const cardsByWidth = viewportWidth / CARD_WIDTH;
+    const possibleNumberOfCards = Math.floor(
+      (cardsByHeight * cardsByWidth) / 2
+    );
+    this.numberOfCards =
+      possibleNumberOfCards > MAX_CARDS ? MAX_CARDS : possibleNumberOfCards;
+
+    this.gameTable = generateRandomGameTable(this.numberOfCards);
   }
 
   resetGame() {
@@ -101,6 +109,18 @@ export default class App extends ScopedElementsMixin(LitElement) {
     }
   }
 
+  checkEndOfGame() {
+    const cardsBlocked = this.gameTable.filter((card) => card.blocked).length;
+
+    if (cardsBlocked === this.numberOfCards * 2) {
+      const memoryDialog = this.shadowRoot.querySelector(
+        '[data-tag-name="memory-dialog"]'
+      );
+
+      memoryDialog.opened = true;
+    }
+  }
+
   flippingCard({ detail: { idCard, imageId } }) {
     const cardsFlipped = this.gameTable.filter(
       (card) => card.flipped && !card.blocked
@@ -113,6 +133,7 @@ export default class App extends ScopedElementsMixin(LitElement) {
       case 1:
         this.flipCard(idCard);
         this.checkMatches(imageId);
+        this.checkEndOfGame();
         break;
       default:
         this.unFlipCards(idCard);
@@ -140,9 +161,15 @@ export default class App extends ScopedElementsMixin(LitElement) {
 
   render() {
     return html`
-      <memory-header title="Erick's Memory Game">
+      <memory-header title="Avengers Memory Game">
         <memory-button danger @click=${this.resetGame}> Reset </memory-button>
       </memory-header>
+      <memory-dialog id="memory-dialog" opened>
+        <memory-dialog-content
+          slot="content"
+          @closing-dialog=${this.resetGame}
+        ></memory-dialog-content>
+      </memory-dialog>
       <div class="game-table">${this.renderGameTable()}</div>
     `;
   }

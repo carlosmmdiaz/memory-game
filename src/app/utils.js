@@ -7,7 +7,7 @@ const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min)) + min;
 
 /**
- * Generate a random game table for the memory Game
+ * Generate a random game table for the memory game
  * @param Number numberOfCards different in the game
  */
 export const generateRandomGameTable = (numberOfCards) => {

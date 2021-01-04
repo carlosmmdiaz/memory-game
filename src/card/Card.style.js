@@ -48,12 +48,15 @@ export const styles = css`
     backface-visibility: hidden;
     border-radius: 50%;
     box-sizing: border-box;
-    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   }
 
   /* Style the front side (fallback if image is missing) */
   .flip-card-front {
     background-color: ${blue};
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   /* Style the back side */
@@ -68,5 +71,10 @@ export const styles = css`
     width: 100%;
     height: 100%;
     border-radius: 10px;
+  }
+
+  .flip-card-front img {
+    width: 70px;
+    height: 70px;
   }
 `;
