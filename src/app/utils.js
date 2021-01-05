@@ -1,5 +1,7 @@
+import { ARRAY_OF_IMAGES } from "./constants.js";
+
 /**
- * Generate a random int between min an max
+ * Generates a random int between min an max
  * @param {Number} min
  * @param {Number} max
  */
@@ -7,11 +9,28 @@ const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min)) + min;
 
 /**
+ * Generates a random array of imageIds
+ * @param {Number} numberOfCards different in the game
+ */
+const getRandomImageIds = (numberOfCards) => {
+  const arrayOfImages = [...ARRAY_OF_IMAGES];
+  const randomImageIds = [];
+
+  for (let i = 0; i < numberOfCards; i++) {
+    const randomImageId = getRandomInt(0, arrayOfImages.length);
+
+    randomImageIds.push(arrayOfImages.splice(randomImageId, 1)[0]);
+  }
+
+  return randomImageIds;
+};
+
+/**
  * Generate a random game table for the memory game
  * @param Number numberOfCards different in the game
  */
 export const generateRandomGameTable = (numberOfCards) => {
-  const table = Array.from({ length: numberOfCards }, (_, i) => i + 1);
+  const table = getRandomImageIds(numberOfCards);
   const gameTable = table.concat(table);
   const randomGameTable = [];
 

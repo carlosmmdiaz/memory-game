@@ -7,11 +7,8 @@ import { LionDialog } from "@lion/dialog";
 import { Card } from "../card/Card.js";
 import { DialogContent } from "../dialog-content/DialogContent.js";
 import { generateRandomGameTable } from "./utils.js";
+import { MAX_CARDS, HEADER_HEIGHT, CARD_WIDTH } from "./constants.js";
 import { styles } from "./App.style.js";
-
-const MAX_CARDS = 15;
-const HEADER_HEIGHT = 60;
-const CARD_WIDTH = 150;
 
 export default class App extends ScopedElementsMixin(LitElement) {
   static get scopedElements() {
@@ -26,12 +23,6 @@ export default class App extends ScopedElementsMixin(LitElement) {
 
   static get styles() {
     return styles;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    window.addEventListener("close-overlay", () => console.log("pepe"));
   }
 
   loadGame() {
@@ -164,7 +155,7 @@ export default class App extends ScopedElementsMixin(LitElement) {
       <memory-header title="Avengers Memory Game">
         <memory-button danger @click=${this.resetGame}> Reset </memory-button>
       </memory-header>
-      <memory-dialog id="memory-dialog" opened>
+      <memory-dialog id="memory-dialog">
         <memory-dialog-content
           slot="content"
           @closing-dialog=${this.resetGame}

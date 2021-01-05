@@ -68,7 +68,7 @@ export const styles = css`
 
   img {
     object-fit: fill;
-    width: 100%;
+    width: 80%;
     height: 100%;
     border-radius: 10px;
   }
